@@ -8,9 +8,8 @@ namespace MySapProject.Application.DTOs
 {
     public class BusinessPartnerDto
     {
-        public string CardCode { get; set; } = string.Empty;
-        public string CardName { get; set; } = string.Empty;
-        public string Phone1 { get; set; } = string.Empty;
-        public string Address { get; set; } = string.Empty;
+        public string CardCode { get; set; }
+        public string CardName { get; set; }
+        public string CardType { get; set; }
     }
 }

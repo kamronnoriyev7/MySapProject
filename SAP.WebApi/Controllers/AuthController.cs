@@ -18,7 +18,7 @@ namespace MySapProject.WebApi.Controllers
             _logoutService = logoutService;
         }
 
-        [HttpPost("login")]
+        [HttpPost("Login")]
         public async Task<IActionResult> Login([FromBody] LoginRequest loginRequest)
         {
             if (loginRequest == null)
@@ -29,7 +29,7 @@ namespace MySapProject.WebApi.Controllers
             return Ok(await _loginService.LoginAsync(loginRequest));
         }
 
-        [HttpPost("logout")]
+        [HttpPost("Logout")]
         public async Task<IActionResult> Logout()
         {
             var result = await _logoutService.LogoutAndClearSessionAsync();

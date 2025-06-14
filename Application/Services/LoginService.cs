@@ -28,9 +28,10 @@ public class LoginService : ILoginService
         var sapLoginResponse = CreateResponse(result);
 
         var sessionId = sapLoginResponse.SessionId;
-        var version = sapLoginResponse.Version;
+        var routeId = sapLoginResponse.RouteId;
 
-        await _sessionStorage.SetSessionAsync(sessionId, version);
+        await _sessionStorage.SetSessionAsync(sessionId, routeId);
+
         return sapLoginResponse;
     }
 

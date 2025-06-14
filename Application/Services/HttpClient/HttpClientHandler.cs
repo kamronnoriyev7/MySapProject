@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MySapProject.Application.Services
+namespace MySapProject.Application.Services.HttpClient
 {
     public class HttpClientHandler : DelegatingHandler
     {
@@ -18,18 +18,22 @@ namespace MySapProject.Application.Services
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
             var sessionId = await _sessionStorage.GetSessionIdAsync();
-            if (!string.IsNullOrEmpty(sessionId))
-            {
-                request.Headers.Add("Cookie", $"B1SESSION={sessionId}");
-            }
-
             var routeId = await _sessionStorage.GetRouteIdAsync();
-            if (!string.IsNullOrEmpty(routeId))
+
+            if (!string.IsNullOrEmpty(sessionId) || !string.IsNullOrEmpty(routeId))
             {
-                request.Headers.Add("Cookie", $"ROUTEID={routeId}");
+                var cookieValue = new List<string>();
+                if (!string.IsNullOrEmpty(sessionId))
+                    cookieValue.Add($"B1SESSION={sessionId}");
+                if (!string.IsNullOrEmpty(routeId))
+                    cookieValue.Add($"ROUTEID={routeId}");
+
+                request.Headers.Remove("Cookie");
+                request.Headers.Add("Cookie", string.Join("; ", cookieValue));
             }
 
             return await base.SendAsync(request, cancellationToken);
         }
+
     }
 }

@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,24 +11,53 @@ namespace MySapProject.Application.Services;
 
 public class SessionStorage : ISessionStorage
 {
-    private string _sessionId;
-    private string _routeId;
+    private readonly IHttpContextAccessor _httpContextAccessor;
+
+    public SessionStorage(IHttpContextAccessor httpContextAccessor)
+    {
+        _httpContextAccessor = httpContextAccessor;
+    }
 
     public Task SetSessionAsync(string sessionId, string routeId)
     {
-        _sessionId = sessionId;
-        _routeId = routeId;
+        var context = _httpContextAccessor.HttpContext;
+        if (context != null)
+        {
+            context.Session.Set("SessionId", Encoding.UTF8.GetBytes(sessionId ?? ""));
+            context.Session.Set("RouteId", Encoding.UTF8.GetBytes(routeId ?? ""));
+        }
         return Task.CompletedTask;
     }
 
-    public Task<string> GetSessionIdAsync() => Task.FromResult(_sessionId);
+    public Task<string> GetSessionIdAsync()
+    {
+        var context = _httpContextAccessor.HttpContext;
+        if (context?.Session.TryGetValue("SessionId", out var value) == true)
+        {
+            return Task.FromResult(Encoding.UTF8.GetString(value));
+        }
+        return Task.FromResult<string>(null);
+    }
 
-    public Task<string> GetRouteIdAsync() => Task.FromResult(_routeId);
+    public Task<string> GetRouteIdAsync()
+    {
+        var context = _httpContextAccessor.HttpContext;
+        if (context?.Session.TryGetValue("RouteId", out var value) == true)
+        {
+            return Task.FromResult(Encoding.UTF8.GetString(value));
+        }
+        return Task.FromResult<string>(null);
+    }
 
     public Task ClearSessionAsync()
     {
-        _sessionId = null;
-        _routeId = null;
+        var context = _httpContextAccessor.HttpContext;
+        if (context != null)
+        {
+            context.Session.Remove("SessionId");
+            context.Session.Remove("RouteId");
+        }
         return Task.CompletedTask;
     }
 }
+

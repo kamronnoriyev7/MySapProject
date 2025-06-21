@@ -9,11 +9,11 @@ namespace MySapProject.Domain.Entities
 {
     public class Item
     {
-        public string ItemCode { get; set; }       // Unikal mahsulot kodi  
-        public string ItemName { get; set; }       // Mahsulot nomi  
-        public string ItemType { get; set; }       // Doimiy: "itItems"  
-        public string InventoryUOM { get; set; }   // O'lchov birligi (masalan: pcs)  
-        public int ItemsGroupCode { get; set; }    // Mahsulot guruhi kodi  
+        public string ItemCode { get; set; }      
+        public string ItemName { get; set; }   
+        public string ItemType { get; set; }     
+        public string InventoryUOM { get; set; }   
+        public int ItemsGroupCode { get; set; }   
         public string U_TypeGroup { get; set; } 
     }
 }

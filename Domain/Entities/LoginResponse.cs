@@ -10,7 +10,7 @@ public class LoginResponse
 {
     public string? SessionId { get; set; }
 
-    [JsonPropertyName("Version")] // SAP'dan kelayotgan nom
-    public string? RouteId { get; set; } // Lekin Cookie uchun ROUTEID bo‘ladi
+    [JsonPropertyName("Version")] 
+    public string? RouteId { get; set; } 
 }
 
